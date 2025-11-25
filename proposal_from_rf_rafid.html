@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> MY PORPOSAL! 🥰</title>
+    <style>
+        /* ফন্ট ইম্পোর্ট */
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400;700;800&display=swap');
+
+        :root {
+            --primary-color: #ff1493; /* ডিপ হট পিঙ্ক/ডিপ পিঙ্ক */
+            --secondary-color: #ffb6c1; /* লাইট পিঙ্ক */
+            --text-color: #333333; /* ডিপ গ্রে/কালো */
+            --bg-color: #ffffff; /* সাদা */
+            --neon-shadow: 0 0 8px var(--primary-color), 0 0 15px var(--primary-color);
+            --neon-shadow-text: 0 0 2px #fff, 0 0 4px #ff69b4, 0 0 8px #ff1493;
+            --dark-bg: #1a1a1a; /* পেজ ৫ এর জন্য কালো ব্যাকগ্রাউন্ড */
+        }
+
+        body {
+            font-family: 'Baloo Da 2', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            overflow-x: hidden;
+            color: var(--text-color);
+            text-align: center;
+            transition: background-color 0.8s ease;
+            position: relative;
+        }
+
+        /* প্রধান কন্টেইনার - স্থির নেভিগেশনের জন্য আপডেট করা হয়েছে */
+        .page {
+            width: 90%;
+            max-width: 650px;
+            padding: 30px 20px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            
+            /* নেভিগেশনের জন্য এটিই মূল পরিবর্তন */
+            position: absolute; /* সমস্ত পেজ একই অবস্থানে থাকবে */
+            opacity: 0;
+            transform: scale(0.8) translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+            z-index: 10;
+            
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            
+            /* নিশ্চিত করা যে শুধুমাত্র একটি পেজ দেখা যায় */
+            pointer-events: none;
+        }
+
+        .page.active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+            position: relative; /* সক্রিয় পেজকে উপরে নিয়ে আসা */
+            z-index: 20;
+        }
+        
+        /* উন্নত অ্যানিমেশন */
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes neonGlow {
+            0%, 100% { text-shadow: var(--neon-shadow-text); color: var(--primary-color); }
+            50% { text-shadow: none; color: #ff69b4; }
+        }
+        
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            80% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* বাবল ব্যাকগ্রাউন্ড অ্যানিমেশন */
+        .bubbles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bubbles span {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 105, 180, 0.3);
+            bottom: -100px;
+            animation: bubbleAscend 15s linear infinite;
+        }
+
+        .bubbles span:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+        .bubbles span:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+        .bubbles span:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+        .bubbles span:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+        .bubbles span:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
+        .bubbles span:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
+        .bubbles span:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; }
+        .bubbles span:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
+
+        @keyframes bubbleAscend {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 50%; }
+            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; border-radius: 50%; }
+        }
+        
+        /* লাভ পপআপ মডাল */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s;
+        }
+
+        .modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            position: relative;
+            animation: popIn 0.5s;
+            box-shadow: 0 0 50px rgba(255, 105, 180, 1);
+            border: 5px solid var(--primary-color);
+            max-width: 90%;
+        }
+
+        .heart-icon {
+            font-size: 5rem;
+            color: var(--primary-color);
+            animation: heartBeat 1.5s infinite;
+            display: block;
+            margin-bottom: 20px;
+        }
+        
+        .modal-content h2, .modal-content h3 {
+            color: var(--text-color);
+            margin: 10px 0;
+            text-shadow: var(--neon-shadow-text);
+        }
+
+        .modal-content button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--neon-shadow);
+            font-family: 'Baloo Da 2', sans-serif;
+            font-weight: 700;
+        }
+
+        .modal-content button:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+        
+        /* চিঠি ও অন্যান্য কন্টেন্ট স্টাইল */
+        .content-box {
+            background: linear-gradient(135deg, #fff 0%, var(--secondary-color) 100%);
+            border: 5px solid var(--primary-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .next-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 30px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: inline-block;
+            animation: popIn 1s 0.5s forwards;
+            box-shadow: var(--neon-shadow);
+            font-family: 'Baloo Da 2', sans-serif;
+        }
+
+        .next-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* পেজ ২: প্রতিশ্রুতি */
+        #page2 h2 {
+            font-size: 2.2rem;
+            color: #4a235a;
+        }
+        
+        .promise-area {
+            background: #f0f0f0;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px dashed var(--primary-color);
+        }
+        
+        .promise-btn {
+            background-color: #27ae60;
+            color: white;
+            font-size: 1.1rem;
+            padding: 15px 20px;
+            border-radius: 40px;
+            box-shadow: 0 0 10px #27ae60;
+        }
+
+        /* পেজ ৪: কুইজ */
+        .quiz-option {
+            background-color: var(--secondary-color);
+            border: 2px solid var(--primary-color);
+            color: var(--text-color);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 700;
+        }
+        
+        .quiz-option:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .correct-answer { background-color: #27ae60 !important; color: white !important; }
+        .wrong-answer { background-color: #e74c3c !important; color: white !important; }
+
+        /* পেজ ৭: ইউটিউব */
+        .video-container {
+            margin-top: 20px;
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        /* পেজ ৫: কালো ব্যাকগ্রাউন্ড থিম */
+        .dark-page {
+            background: var(--dark-bg) !important;
+            color: white !important;
+            border: 5px solid #fff;
+        }
+        
+        .dark-page .content-box {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="bubbles">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div id="fireworks" class="fireworks"></div>
+
+    <div id="proposal-modal" class="modal show">
+        <div class="modal-content">
+            <span class="heart-icon">💖</span>
+            <h2>BABE DO YOU LOVE ME?🥺</h2>
+            <button onclick="handleInitialResponse('yes')">YES</button>
+            <button onclick="handleInitialResponse('no')">NO</button>
+        </div>
+    </div>
+    
+    <div id="page1" class="page">
+        <h2> হৃদয়ের কথাগুলো... 💌</h2>
+        <div id="letter-opener" class="next-btn" style="padding: 20px 30px;" onclick="handleOpenLetter()">
+            <span style="font-size: 1.5rem;">💌</span>
+            OPEN LOVE LETTER
+        </div>
+        
+        <div id="letter-content" class="content-box" style="opacity: 0; transform: scale(0.9);">
+            <h3>👑🌹❤️</h3>
+            <p><strong>প্রিয় রফিহার আম্মু / ফাবিয়া,</strong></p>
+            <p>তোমাকে প্রথম যেদিন দেখেছি, সেদিন বুঝিনি— এত চুপচাপ একটা মানুষ এত জোরে কারো হৃদয়ে বাসা বাঁধতে পারে। কিন্তু তুমি পেরেছো।</p>
+            <p>একটা হাসি, একটা চোখের চাওয়া, একটা ছোট্ট “হুম”— সব মিলিয়ে তুমি আমার জীবনের খুব শান্ত, কিন্তু খুব গুরুত্বপূর্ণ জায়গাটা দখল করে নিয়েছো।</p>
+            <p>আমি জানি, আমি পারফেক্ট না… কিন্তু তোমাকে ভালোবাসার ইচ্ছেটা একদম সত্যি, খুব গভীর, খুব নিজের। তোমাকে আমি ভালোবাসি। তোমাকে আমি পেয়েছি মানে আমি পৃথিবীর সবকিছু পেয়ে গেছি।</p>
+            <p class="signature">চিরচেনা ছেলেটা,<br>রাফিদ</p>
+        </div>
+        
+        <button id="next-btn-p1" class="next-btn" onclick="goToPage(2)" style="display: none;">GO TO PROMISE 💝</button>
+    </div>
+
+    <div id="page2" class="page">
+        <h2 style="animation: neonGlow 2s infinite alternate;">💍 চিরদিনের প্রতিশ্রুতি 💍</h2>
+        
+        <div class="promise-area">
+            <p style="font-size: 1.5rem; font-weight: 700; color: #e74c3c;">
+                PROMICE ME THAT YOU WON'T LEAVE ME
+            </p>
+            <p style="margin-top: 15px;">
+                এইটা শুধু একটা প্রপোজাল না, এটা আমার তোমাকে সারাজীবন ধরে রাখার ইচ্ছে। তোমার হাসি, তোমার সব স্বপ্ন... সবকিছু আমার।
+            </p>
+        </div>
+        
+        <button id="promise-btn" class="next-btn promise-btn" onclick="handlePromise()">
+            OK I'VE PROMISED YOU THAT I'LL NEVER LEAVE YOU 💞
+        </button>
+
+        <p id="promise-message" style="margin-top: 20px; font-size: 1.3rem; color: var(--primary-color); font-weight: 800; display: none;">
+            তুমি আমার, আমি তোমার। এই বন্ধন চিরকালের! 💞
+        </p>
+        
+        <button id="next-btn-p2" class="next-btn" onclick="goToPage(3)" style="display: none;">The situation before you arrived 💔🩹</button>
+    </div>
+    
+    <div id="page3" class="page">
+        <h2 style="color: #4a235a;">✨ তুমি আমার জীবনে আসার আগে ✨</h2>
+        <div class="content-box">
+            <p>জানো, তোমার আগে আমার জীবনটা ছিল একটা সাদামাটা বইয়ের মতো। পাতার পর পাতা সাদা, রংহীন... কোনো গল্প নেই, কোনো হাসি নেই, এমনকি কোনো অপেক্ষা করার কারণও ছিল না।</p>
+            <p>তুমি এসেছো, আর সব পাল্টে গেছে। হঠাৎ করেই যেন আমার জীবনে বসন্তের রং লেগে গেল। প্রতিটা দিন এখন একটা নতুন অ্যাডভেঞ্চার, একটা নতুন স্বপ্ন। তোমার জন্য অপেক্ষা করাই এখন জীবনের সেরা কাজ।</p>
+            <p style="font-weight: 700; margin-top: 15px;">তুমি শুধু একটা মানুষ নও, তুমি আমার জীবনের রং, সুর আর ছন্দ। 🎨</p>
+        </div>
+        <button class="next-btn" onclick="goToPage(4)">AYEE MERA SAPNOKE RAANII 👑</button>
+    </div>
+    
+    <div id="page4" class="page">
+        <h2 style="animation: neonGlow 2s infinite alternate;">👸 আমার স্বপ্নের রাণী 👸</h2>
+        <div class="content-box">
+            <p style="font-style: italic;">
+                "তুমি কি জানো ফাবিয়া? তুমি আমার কাছে ঠিক কেমন...<br>
+                তুমি ভোরের আলো, তুমি রাতের তাঁরা,<br>
+                তুমি পথ দেখাও, তুমি স্বপ্ন দেখাও ,।<br>
+                তোমার ঐ চোখে সব সুখের গল্প লেখা,<br>
+                আমার হৃদয়ের সবটুকু ভালোবাসা তোমায় দেওয়া।"
+            </p>
+            <p style="margin-top: 20px; font-weight: 700;">তুমি আমার গল্পের নায়িকা, আমার কবিতার শেষ লাইন। ----- আমি তোমাকে ছাড়া আর কিছু ভাবতেই পারি না।</p>
+        </div>
+        <button class="next-btn" onclick="goToPage(5)">MY PLAN ABOUT OUR FUTURE 💞</button>
+    </div>
+    
+    <div id="page5" class="page">
+        <h2 style="color: white; text-shadow: var(--neon-shadow);">🌌 আমাদের ভবিষ্যৎ এক সাথে 🌌</h2>
+        <div class="content-box">
+            <p style="color: white;">আমি আমাদের ভবিষ্যৎ নিয়ে অনেক স্বপ্ন দেখি তারমধ্যে অন্যতম ।</p>
+            <ul style="color: white; list-style-type: '🌟 '; padding-left: 20px;">
+                <li>🌟 একটা ছোট্ট বাসা, যেখানে শুধু তুমি আর আমি থাকব।</li>
+                <li>🌟 প্রতি সন্ধ্যায় হাতে হাত রেখে হাঁটা।</li>
+                <li>🌟 ছুটির দিনে একসাথে নতুন নতুন জায়গায় ঘুরতে যাওয়া।</li>
+                <li>🌟 আর আমাদের রফিহার সাথে হাসি-খুশিতে ভরা জীবন , ব্যাস! এতটুকুই চাওয়া 🎀</li>
+            </ul>
+            <p style="margin-top: 20px; font-weight: 700;">আমার প্রতিটা স্বপ্ন এখন তোমার সাথে বাঁধা। সেই স্বপ্নের পথে হাঁটতে চাও?</p>
+        </div>
+        <button class="next-btn" onclick="goToPage(6)">A SIMPLE QUESTION 🙂🕊️</button>
+    </div>
+
+    <div id="page6" class="page">
+        <h2>💡 A SMALL THING 💡</h2>
+        <p>আচ্ছা বলো তো আমার পছন্দের রং কি ? 😉</p>
+        <div id="quiz-area">
+            <p style="font-weight: 700; margin-top: 20px;">(যা ছাড়া সে চলতে পারে না)?</p>
+            <div id="option-1" class="quiz-option" onclick="checkAnswer(1)">RED </div>
+            <div id="option-2" class="quiz-option" onclick="checkAnswer(2)">BLACK </div>
+            <div id="option-3" class="quiz-option" onclick="checkAnswer(3)">BLUE </div>
+        </div>
+        <p id="quiz-feedback" style="margin-top: 20px; font-weight: 800; display: none;"></p>
+        <button id="next-btn-p6" class="next-btn" onclick="goToPage(7)" style="display: none;">A SONG FOR YOU BABEE</button>
+    </div>
+    
+    <div id="page7" class="page">
+        <h2>🎶 তোমার জন্য একটি গান 🎶</h2>
+        <p>এই গানটা শোনো, এর প্রতিটি কথায় আমার মনের কথা লেখা। (সাউন্ড অন করে নাও!)</p>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/5F2v_25gM20?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <p style="margin-top: 20px; font-weight: 700;">গানটা কেমন লাগলো? তুমিই আমার মিউজিক! 🎧</p>
+        <button class="next-btn" onclick="goToPage(8)">WILL YOU?😿</button>
+    </div>
+
+    <div id="page8" class="page">
+        <span style="font-size: 4rem; animation: heartBeat 2s infinite;">💍</span>
+        <h1 style="color: var(--primary-color); font-size: 2.5rem; animation: neonGlow 2s infinite alternate;">WILL YOU MARRY ME?</h1>
+        
+        <div class="content-box">
+            <h3>চিরদিনের জন্য আমার বউ হবে?</h3>
+            <p>তুমি শুধু আমার স্ত্রী নও, তুমি আমার জীবনের সেরা মানুষ,যে একদম মন এ গেঁথে গিয়েছে  আর আমার সব স্বপ্নের ঠিকানা। আমি কথা দিচ্ছি, এই সম্পর্ক ও তোমাকে আমি সারা জীবন আগলে রাখব। আমার রাজ্যের রাণী তুমি। তোমার হাসি ছাড়া আমার আর কিছু চাই না।</p>
+            <p style="font-weight: 900; color: #e74c3c; font-size: 1.5rem; margin-top: 20px;">
+                তুমি কি আমার সাথে থাকার জন্য রাজি ?🥺
+            </p>
+        </div>
+        <button class="next-btn" onclick="handleFinalAcceptance()">
+            Yes! Agreed for life!🌹
+        </button>
+    </div>
+
+    <div id="no-response-modal" class="modal">
+        <div class="modal-content">
+            <span class="heart-icon">😾</span>
+            <h3>THINK AGAIN , DO YOU LOVE ME ?</h3>
+            <button onclick="handleInitialResponse('yes')">YES</button>
+            <button onclick="handleNoAgain()">NO</button>
+        </div>
+    </div>
+
+    <div id="please-accept-modal" class="modal">
+        <div class="modal-content">
+            <span class="heart-icon">😻😽</span>
+            <h3>PLEASE BABE ACCEPT</h3>
+            <button onclick="handleFinalAccept()">OKY</button>
+        </div>
+    </div>
+    
+    <div id="final-success-modal" class="modal">
+        <div class="modal-content">
+            <span class="heart-icon" style="font-size: 8rem;">‍🎀💌️</span>
+            <h2 style="font-size: 2.5rem;">THANK YOU BABE FOR COMMING INTO MY LIFE PRIYOOOOH 🕊️</h2>
+            <p style="font-weight: 700; font-size: 1.2rem;">💌তুমি আমার কাছে LUXURY না… NECESSITY , তুমাকে ছাড়া থাকলে জীবন HALF-EMPTY ,  তুমিই আমার XAAAN, আমার PEACE💝</p>
+        </div>
+    </div>
+
+    <script>
+        // DOM উপাদানগুলি
+        const proposalModal = document.getElementById('proposal-modal');
+        const noResponseModal = document.getElementById('no-response-modal');
+        const pleaseAcceptModal = document.getElementById('please-accept-modal');
+        const finalSuccessModal = document.getElementById('final-success-modal');
+        const pages = [
+            document.getElementById('page1'), document.getElementById('page2'), document.getElementById('page3'), 
+            document.getElementById('page4'), document.getElementById('page5'), document.getElementById('page6'), 
+            document.getElementById('page7'), document.getElementById('page8')
+        ];
+        const letterOpener = document.getElementById('letter-opener');
+        const letterContent = document.getElementById('letter-content');
+        const nextBtnP1 = document.getElementById('next-btn-p1');
+        const promiseBtn = document.getElementById('promise-btn');
+        const nextBtnP2 = document.getElementById('next-btn-p2');
+        const quizOptions = [document.getElementById('option-1'), document.getElementById('option-2'), document.getElementById('option-3')];
+        const quizFeedback = document.getElementById('quiz-feedback');
+        const nextBtnP6 = document.getElementById('next-btn-p6');
+        const fireworksContainer = document.getElementById('fireworks');
+        
+        // ফাংশন ১: ফায়ারওয়ার্কস তৈরি করা
+        function createFirework(x, y) {
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 20 + 5;
+                const vx = Math.cos(angle) * speed;
+                const vy = Math.sin(angle) * speed;
+                
+                particle.animate([
+                    { transform: `translate(0, 0)`, opacity: 1, background: `hsl(${Math.random() * 360}, 100%, 70%)` },
+                    { transform: `translate(${vx * 20}px, ${vy * 20}px) scale(0)`, opacity: 0 }
+                ], {
+                    duration: 1000,
+                    easing: 'ease-out'
+                });
+
+                fireworksContainer.appendChild(particle);
+                setTimeout(() => particle.remove(), 1000);
+            }
+        }
+
+        // ফাংশন ২: সব মডাল ও পেজ লুকানো
+        function hideAllModalsAndPages() {
+            proposalModal.classList.remove('show');
+            noResponseModal.classList.remove('show');
+            pleaseAcceptModal.classList.remove('show');
+            finalSuccessModal.classList.remove('show');
+            pages.forEach(page => {
+                page.classList.remove('active');
+                page.classList.remove('dark-page'); // ডার্ক মোডও লুকিয়ে ফেলা হলো
+            });
+            document.body.style.backgroundColor = 'var(--bg-color)'; // ব্যাকগ্রাউন্ড রিসেট
+        }
+
+        // ফাংশন ৩: পেজ পরিবর্তন (স্থির এবং নির্ভরযোগ্য নেভিগেশনের জন্য আপডেট করা হয়েছে)
+        function goToPage(pageNumber) {
+            // ১. মডাল এবং সব পেজ লুকিয়ে ফেলুন
+            hideAllModalsAndPages();
+            
+            // ২. নিশ্চিত করুন যে টার্গেট পেজটি আছে
+            const targetPage = pages[pageNumber - 1];
+            if (!targetPage) return; 
+
+            // ৩. ব্যাকগ্রাউন্ড পরিবর্তন ও ডার্ক মোড নিয়ন্ত্রণ
+            if (pageNumber === 5) {
+                document.body.style.backgroundColor = 'var(--dark-bg)'; 
+                targetPage.classList.add('dark-page');
+            } else {
+                 document.body.style.backgroundColor = 'var(--bg-color)'; 
+            }
+
+            // ৪. ট্রানজিশনের জন্য অপেক্ষা না করে সাথে সাথে পেজ পরিবর্তন করুন
+            targetPage.classList.add('active');
+            
+            // ৫. পেজ ৮ (ফাইনাল) এর জন্য ফায়ারওয়ার্কস
+            if (pageNumber === 8) {
+                // ফায়ারওয়ার্কস একটু দেরিতে শুরু করা যাতে ট্রানজিশন শেষ হয়
+                setTimeout(() => {
+                    createFirework(window.innerWidth * 0.2, window.innerHeight * 0.7);
+                    createFirework(window.innerWidth * 0.8, window.innerHeight * 0.7);
+                }, 1000); 
+            }
+        }
+
+
+        // ফাংশন ৪: প্রাথমিক উত্তর (YES/NO) হ্যান্ডেল করা (ভিডিওতে দেখা সমস্যা ফিক্স)
+        function handleInitialResponse(response) {
+            // ১. মডাল লুকানো
+            proposalModal.classList.remove('show');
+            
+            // ২. লজিক চেক
+            if (response === 'yes') {
+                goToPage(1); // নিশ্চিতভাবে পেজ ১ এ নেভিগেট করুন
+            } else if (response === 'no') {
+                noResponseModal.classList.add('show');
+            }
+        }
+
+        // ফাংশন ৫: NO-এর পর আবার NO হ্যান্ডেল করা
+        function handleNoAgain() {
+            hideAllModalsAndPages();
+            pleaseAcceptModal.classList.add('show');
+        }
+
+        // ফাংশন ৬: ফাইনাল একসেপ্ট (OKY) হ্যান্ডেল করা
+        function handleFinalAccept() {
+            hideAllModalsAndPages();
+            
+            // THANK YOU অ্যানিমেশন
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = '<h2 style="color: #27ae60; animation: popIn 1s; margin-top: -50px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 200; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,255,0,0.5);">THANK YOU!</h2>';
+            document.body.appendChild(tempDiv);
+            createFirework(window.innerWidth / 2, window.innerHeight / 2);
+            
+            setTimeout(() => {
+                tempDiv.remove();
+                goToPage(1); // নিশ্চিতভাবে পেজ ১ এ নেভিগেট করুন
+            }, 1500);
+        }
+
+        // ফাংশন ৭: চিঠি খোলা (বাটন কাজ না করার ফিক্স)
+        function handleOpenLetter() {
+            if (letterOpener && letterContent && nextBtnP1) {
+                // ওপেনার বাটনের অপাসিটি কমানো
+                letterOpener.style.opacity = '0';
+                letterOpener.style.pointerEvents = 'none'; // ক্লিক ব্লক করা
+
+                setTimeout(() => {
+                    letterOpener.style.display = 'none';
+                    // letterContent দেখানোর জন্য স্টাইল পরিবর্তন
+                    letterContent.style.opacity = '1';
+                    letterContent.style.transform = 'scale(1)';
+                    nextBtnP1.style.display = 'inline-block';
+                }, 500);
+            }
+        }
+        
+        // ফাংশন ৮: প্রতিশ্রুতি হ্যান্ডেল করা
+        function handlePromise() {
+            promiseBtn.style.display = 'none';
+            document.getElementById('promise-message').style.display = 'block';
+            nextBtnP2.style.display = 'inline-block';
+            
+            // প্রতিশ্রুতি নিশ্চিত হলে ফায়ারওয়ার্কস
+            createFirework(window.innerWidth / 2, window.innerHeight * 0.7);
+        }
+
+        // ফাংশন ৯: কুইজের উত্তর পরীক্ষা করা (উত্তর: ২)
+        function checkAnswer(optionNumber) {
+            const correctAnswer = 2; 
+            
+            // সব অপশনের ক্লিক ইভেন্ট বন্ধ করা
+            quizOptions.forEach(opt => opt.onclick = null);
+
+            if (optionNumber === correctAnswer) {
+                quizOptions[optionNumber - 1].classList.add('correct-answer');
+                quizFeedback.textContent = 'GOOD BABEEE  YORE RIGHT , UMMA! 💯';
+            } else {
+                quizOptions[optionNumber - 1].classList.add('wrong-answer');
+                quizOptions[correctAnswer - 1].classList.add('correct-answer');
+                quizFeedback.textContent = 'উহু! আরেকটু ভাবো। আমার প্রিয় রং BLACK! 😉';
+            }
+            
+            quizFeedback.style.display = 'block';
+            nextBtnP6.style.display = 'inline-block';
+        }
+        
+        // ফাংশন ১০: ফাইনাল একসেপ্টেন্স
+        function handleFinalAcceptance() {
+            hideAllModalsAndPages();
+            finalSuccessModal.classList.add('show');
+            
+            // বড় ধরনের ফায়ারওয়ার্কস
+            createFirework(window.innerWidth * 0.3, window.innerHeight * 0.8);
+            createFirework(window.innerWidth * 0.7, window.innerHeight * 0.8);
+            createFirework(window.innerWidth * 0.5, window.innerHeight * 0.5);
+        }
+
+
+        // ডকুমেন্ট লোড হওয়ার পরে শুরু
+        document.addEventListener('DOMContentLoaded', () => {
+            // নিশ্চিত করা হয় যে শুরুতে শুধু প্রপোজাল মডাল দেখা যাচ্ছে
+            proposalModal.classList.add('show');
+            // পেজ ১ শুরুতে অদৃশ্য রাখতে হবে
+            pages.forEach(page => page.classList.remove('active'));
+        });
+    </script>
+</body>
+</html>
